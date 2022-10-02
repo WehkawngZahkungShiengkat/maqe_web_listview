@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from numpy import datetime_data
+from datetime import datetime
 import requests
 import json
 from urllib.request import urlopen
@@ -47,7 +47,7 @@ async def read_item(request: Request):
     for post in posts:
         post_ext = post
         post_ext["switch"] = color_switch
-        created_at = post_ext["created_at"].replace(
+        created_at = post["created_at"].replace(
             "T", " ").replace("Z", "")
         post_ext["created_at"] = format_datetime(created_at)
         post_ext["author"] = next(
@@ -87,14 +87,15 @@ def get_timezone(city_name):
 
 
 def format_datetime(dt):
-    from datetime import datetime
-    print(dt)
-    date_time_obj = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
-    DoW = date_time_obj.strftime('%A')
-    MonthN = date_time_obj.strftime('%B')
-    DateD = date_time_obj.day
-    DateY = date_time_obj.year
-    TimeH = date_time_obj.hour
-    TimeM = date_time_obj.minute
+    try:
+        date_time_obj = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
+        DoW = date_time_obj.strftime('%A')
+        MonthN = date_time_obj.strftime('%B')
+        DateD = date_time_obj.day
+        DateY = date_time_obj.year
+        TimeH = date_time_obj.hour
+        TimeM = date_time_obj.minute
 
-    return f"{DoW}, {MonthN} {DateD}, {DateY}, {TimeH}:{TimeM}"
+        return f"{DoW}, {MonthN} {DateD}, {DateY}, {TimeH}:{TimeM}"
+    except Exception as e:
+        return dt
