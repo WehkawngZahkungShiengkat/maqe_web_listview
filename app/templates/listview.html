@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', path='/main.css') }}" rel="stylesheet">
+    <!-- <script src='main.js'></script> -->
+</head>
+
+<body>
+    <h1>MAQE Forum</h1>
+    <p>Your current timezone is: {{data.timezone}}</p>
+    {% for post in data.posts %}
+    {% if post.switch %}
+    <div class="post-container">
+        <div class="post-info" style="background-color: #ccecff;">
+            <div class="author-avatar">
+                <img src="{{post.author.avatar_url}}" alt="Avatar" class="author-img">
+            </div>
+            <p class="post-info-data">
+                <b class="name">
+                    {{post.author.name}}
+                </b>
+                posted on {{post.created_at}}
+            </p>
+        </div>
+        <div class="post-content" style="background-color: #ccecff;">
+            <div class="post-img" style="background-image: url({{post.image_url}}); background-size: contain;">
+                <!-- <img src="{{post.image_url}}" alt="PostImg" class="post-img"> -->
+            </div>
+            <div class="post-content-detail">
+                <h3 class="post-content-header">{{post.title}}</h3>
+                <p class="post-content-body">
+                    {{post.body}}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="post-container">
+        <div class="post-info">
+            <div class="author-avatar">
+                <img src="{{post.author.avatar_url}}" alt="Avatar" class="author-img">
+            </div>
+            <p class="post-info-data">
+                <b class="name">
+                    {{post.author.name}}
+                </b>
+                posted on {{post.created_at}}
+            </p>
+        </div>
+        <div class="post-content">
+            <div class="post-img" style="background-image: url({{post.image_url}}); background-size: contain;">
+                <!-- <img src="{{post.image_url}}" alt="PostImg" class="post-img"> -->
+            </div>
+            <div class="post-content-detail">
+                <h3 class="post-content-header">{{post.title}}</h3>
+                <p class="post-content-body">
+                    {{post.body}}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</body>
+
+</html>
