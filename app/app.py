@@ -58,6 +58,41 @@ async def read_item(request: Request):
     return templates.TemplateResponse("listview.html", {"request": request, "data": data})
 
 
+@app.get("/api")
+async def read_item(request: Request):
+    import datetime
+    import urllib
+    posts_ext = []
+    print("request: ", request.client.host)
+
+    response = requests.get(
+        f'http://api.hostip.info/get_html.php?ip={request.client.host}&position=true')
+
+    # response_json = json.loads(response.content.decode().replace("\n", ","))
+    response_str = response.content.decode().replace(": ", ",").replace("\n", ",")
+    response_dict = response_str.split(",")
+    print(response_dict)
+
+    timezone = get_timezone(response_dict[3])
+    # timezone = get_timezone("Bangkok")
+
+    # tz = datetime.timedelta(seconds=int(request.cookies["timezone"]))
+    # print("tz :", tz)
+    color_switch = False
+    for post in posts:
+        post_ext = post
+        post_ext["switch"] = color_switch
+        created_at = post["created_at"].replace(
+            "T", " ").replace("Z", "")
+        post_ext["created_at"] = format_datetime(created_at)
+        post_ext["author"] = next(
+            (user for user in users if user.get("id") == post.get("author_id")), None)
+        posts_ext.append(post_ext)
+        color_switch = not color_switch
+    data = {"timezone": timezone, "posts": posts_ext}
+    return {"data": data}
+
+
 @app.get("/a")
 async def getdataList():
     return users
