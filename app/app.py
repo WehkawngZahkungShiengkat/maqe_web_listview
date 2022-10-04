@@ -25,8 +25,6 @@ with urlopen("http://maqe.github.io/json/posts.json") as url:
 
 @app.get("/")
 async def read_item(request: Request):
-    import datetime
-    import urllib
     posts_ext = []
     print("request: ", request.client.host)
 
@@ -60,8 +58,6 @@ async def read_item(request: Request):
 
 @app.get("/api")
 async def read_item(request: Request):
-    import datetime
-    import urllib
     posts_ext = []
     print("request: ", request.client.host)
 
